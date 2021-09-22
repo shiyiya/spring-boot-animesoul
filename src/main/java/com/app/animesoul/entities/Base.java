@@ -17,9 +17,6 @@ import java.util.Date;
 @EntityListeners(AuditingEntityListener.class)
 public class Base implements Serializable {
 
-    @Transient
-    private boolean isNew = true;
-
     @Id
     @GeneratedValue(generator = "uuid")// 默认：org.hibernate.id.UUIDHexGenerator
     @GenericGenerator(name = "uuid", strategy = "org.hibernate.id.UUIDGenerator")

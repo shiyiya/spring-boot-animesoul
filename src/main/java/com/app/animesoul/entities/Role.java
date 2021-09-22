@@ -1,16 +1,21 @@
 package com.app.animesoul.entities;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 
 @Entity
+@Getter
+@Setter
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private int id;
 
-    @Column
+    @Column(length = 8)
     private String name;
 
-    @Column
+    @Column(length = 36)
     private String description;
 }
