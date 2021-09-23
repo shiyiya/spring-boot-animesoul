@@ -66,7 +66,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //                .antMatchers("/auth/**").permitAll()
 //                .antMatchers("/user/checkUsernameAvailability")
 //                .permitAll()
-                .antMatchers("/0x00/**").hasAnyRole("root", "admin")
+                .antMatchers("/0x00/**", "/druid").hasAnyRole("root", "admin")
                 .anyRequest().permitAll()
 //                .anyRequest().authenticated()// Rest of the request must be authenticated
                 .and().apply(new JwtConfigurer(jwtTokenProvider))
