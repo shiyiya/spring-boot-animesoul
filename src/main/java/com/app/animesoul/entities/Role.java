@@ -1,5 +1,6 @@
 package com.app.animesoul.entities;
 
+import com.app.animesoul.constant.Roles;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,8 +14,9 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-    @Column(length = 8)
-    private String name;
+    @Column(length = 18)
+    @Enumerated(EnumType.STRING)
+    private Roles name;
 
     @Column(length = 36)
     private String description;

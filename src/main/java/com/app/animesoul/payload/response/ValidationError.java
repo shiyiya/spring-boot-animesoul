@@ -1,4 +1,4 @@
-package com.app.animesoul.exception;
+package com.app.animesoul.payload.response;
 
 import lombok.Getter;
 import lombok.ToString;

@@ -1,6 +1,6 @@
 package com.app.animesoul.config;
 
-import com.app.animesoul.exception.ValidationError;
+import com.app.animesoul.payload.response.ValidationError;
 import com.app.animesoul.payload.response.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -5,7 +5,6 @@ import com.app.animesoul.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,12 +18,10 @@ import java.util.Optional;
 @RequestMapping(value = "/user")
 public class UserController {
 
-    private final AuthenticationManager authenticationManager;
     private final UserRepository userRepository;
 
     @Autowired
-    public UserController(AuthenticationManager authenticationManager, UserRepository userRepository) {
-        this.authenticationManager = authenticationManager;
+    public UserController(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
