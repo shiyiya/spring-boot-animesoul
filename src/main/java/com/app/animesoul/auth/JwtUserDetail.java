@@ -2,26 +2,27 @@ package com.app.animesoul.auth;
 
 
 import com.app.animesoul.entities.User;
+import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.stream.Collectors;
 
 
-public class UserPrincipal implements UserDetails {
+@ToString
+public class JwtUserDetail implements UserDetails {
     private final User user;
 
-    public UserPrincipal(User user) {
+    public JwtUserDetail(User user) {
         this.user = user;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return user.getRoles().stream().map(role ->
-                new SimpleGrantedAuthority(role.getName())
+                new SimpleGrantedAuthority("ROLE_" + role.getName())
         ).collect(Collectors.toList());
     }
 
@@ -53,5 +54,9 @@ public class UserPrincipal implements UserDetails {
     @Override
     public boolean isEnabled() {
         return Integer.parseInt(user.getStatus()) > 0;
+    }
+
+    public User getUser() {
+        return user;
     }
 }

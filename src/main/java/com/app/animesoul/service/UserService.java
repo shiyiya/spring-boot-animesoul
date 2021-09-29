@@ -1,6 +1,6 @@
 package com.app.animesoul.service;
 
-import com.app.animesoul.auth.UserPrincipal;
+import com.app.animesoul.auth.JwtUserDetail;
 import com.app.animesoul.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,6 +18,6 @@ class UserService {
     }
 
     public UserDetails findUserByUserName(String loginId) throws UsernameNotFoundException {
-        return userRepository.findById(loginId).map(UserPrincipal::new).orElseThrow(() -> new UsernameNotFoundException("LoginId: " + loginId + " not found"));
+        return userRepository.findById(loginId).map(JwtUserDetail::new).orElseThrow(() -> new UsernameNotFoundException("LoginId: " + loginId + " not found"));
     }
 }

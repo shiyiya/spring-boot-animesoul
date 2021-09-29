@@ -1,6 +1,5 @@
 package com.app.animesoul;
 
-import com.app.animesoul.entities.User;
 import com.app.animesoul.repositories.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -20,11 +19,11 @@ public class AnimeSoulApplication {
     public CommandLineRunner run(UserRepository userRepository) {
         return (String[] args) -> {
             // TODO: 初始化数据库角色
-            User user1 = new User("Bob", "bob@domain.com");
-            User user2 = new User("Jenny", "jenny@domain.com");
-            userRepository.save(user1);
-            userRepository.save(user2);
-            userRepository.findAll().forEach(System.out::println);
+            //    User user1 = new User("Bob", "bob@domain.com");
+            //   User user2 = new User("Jenny", "jenny@domain.com");
+            //    userRepository.save(user1);
+            //     userRepository.save(user2);
+            //    userRepository.findAll().forEach(System.out::println);
         };
     }
 }

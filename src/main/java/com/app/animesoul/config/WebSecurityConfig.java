@@ -1,6 +1,7 @@
 package com.app.animesoul.config;
 
-import com.app.animesoul.auth.JwtAuthenticationEntryPoint;
+import com.app.animesoul.auth.JwtAuthHandler.JwtAccessDeniedHandler;
+import com.app.animesoul.auth.JwtAuthHandler.JwtAuthenticationHandler;
 import com.app.animesoul.auth.JwtConfigurer;
 import com.app.animesoul.auth.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private UserDetailsService jwtUserDetailsService;
 
     @Autowired
-    private JwtAuthenticationEntryPoint unauthorizedHandler;
+    private JwtAuthenticationHandler jwtAuthenticationHandler;
+
+    @Autowired
+    private JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
 
     @Bean
@@ -59,9 +63,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors().and()
                 .httpBasic().disable()
                 .csrf().disable()
-                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
-                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
+                .and().exceptionHandling().authenticationEntryPoint(jwtAuthenticationHandler)
                 .and().authorizeRequests()
 //                .antMatchers("/auth/**").permitAll()
 //                .antMatchers("/user/checkUsernameAvailability")
@@ -71,6 +75,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //                .anyRequest().authenticated()// Rest of the request must be authenticated
                 .and().apply(new JwtConfigurer(jwtTokenProvider))
         ;
+        http.exceptionHandling().accessDeniedHandler(jwtAccessDeniedHandler);
+
     }
 
     @Bean

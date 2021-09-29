@@ -1,10 +1,11 @@
 package com.app.animesoul.controller;
 
 import com.app.animesoul.auth.JwtTokenProvider;
+import com.app.animesoul.auth.JwtUserDetail;
 import com.app.animesoul.entities.User;
-import com.app.animesoul.payload.ApiResponse;
-import com.app.animesoul.payload.JwtAuthenticationResponse;
-import com.app.animesoul.payload.SignUpRequest;
+import com.app.animesoul.payload.request.SignUpRequest;
+import com.app.animesoul.payload.response.ApiResponse;
+import com.app.animesoul.payload.response.JwtAuthenticationResponse;
 import com.app.animesoul.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,13 +15,16 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.logging.Logger;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping(value = "/auth")
 public class AuthController {
 
     private final JwtTokenProvider jwtTokenProvider;
@@ -36,27 +40,31 @@ public class AuthController {
         this.userRepository = userRepository;
     }
 
-    @GetMapping("/refresh_token")
-    public Object refreshToken(@RequestParam String userName) {
-        return userRepository.findByUserName(userName);
-    }
-
     @PostMapping("/signin")
-    public ResponseEntity<JwtAuthenticationResponse> register(@Valid SignUpRequest signUpRequest) {
+    public ResponseEntity<?> signin(@Valid @RequestBody SignUpRequest signUpRequest) {
+        Logger.getGlobal().info("signin " + signUpRequest.toString());
+
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         signUpRequest.getUserName(),
-                        passwordEncoder.encode(signUpRequest.getPassword())
-                )
-        );
+                        signUpRequest.getPassword()
+                ));
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        Logger.getGlobal().info(authentication.toString());
-        String jwt = jwtTokenProvider.generateToken(authentication);
-        return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
+
+        final String jwt = jwtTokenProvider.generateToken(authentication);
+        JwtUserDetail userDetails = (JwtUserDetail) authentication.getPrincipal();
+        // List<String> roles = userDetails.getAuthorities().stream()
+//                .map(GrantedAuthority::getAuthority)
+//                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(new JwtAuthenticationResponse(jwt, userDetails.getUser()));
+
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<ApiResponse<?>> registerUser(@Valid SignUpRequest signUpRequest) {
+    public ResponseEntity<?> signup(@Valid @RequestBody SignUpRequest signUpRequest) {
+        Logger.getGlobal().info("registerUser " + signUpRequest + signUpRequest.getPassword());
+
         if (userRepository.existsByUserName(signUpRequest.getUserName())) {
             return new ResponseEntity<>(ApiResponse.x(400, "Username is already taken!"),
                     HttpStatus.BAD_REQUEST);

@@ -18,9 +18,12 @@ public class JwtUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-        Logger.getGlobal().info("JwtUserDetailsService loadUserByUsername " + this.userRepo.findByUserName(userName).toString());
-        return this.userRepo.findByUserName(userName)//TODO: 使用 Jwt Token 内信息做验证
-                .map(UserPrincipal::new) //BCryptPasswordEncoder.encode(password)
+        final UserDetails user = this.userRepo.findByUserName(userName)//TODO: 使用 Jwt Token 内信息做验证
+                .map(JwtUserDetail::new) //BCryptPasswordEncoder.encode(password)
                 .orElseThrow(() -> new UsernameNotFoundException("userName: " + userName + " not found"));
+
+        Logger.getGlobal().info("JwtUserDetailsService loadUserByUsername " + userName + "  " + user);
+
+        return user;
     }
 }
