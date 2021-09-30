@@ -66,6 +66,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
                 .and().exceptionHandling().authenticationEntryPoint(jwtAuthenticationHandler)
+                .and().exceptionHandling().accessDeniedHandler(jwtAccessDeniedHandler)
                 .and().authorizeRequests()
 //                .antMatchers("/auth/**").permitAll()
 //                .antMatchers("/user/checkUsernameAvailability")
@@ -75,8 +76,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //                .anyRequest().authenticated()// Rest of the request must be authenticated
                 .and().apply(new JwtConfigurer(jwtTokenProvider))
         ;
-        http.exceptionHandling().accessDeniedHandler(jwtAccessDeniedHandler);
-
     }
 
     @Bean

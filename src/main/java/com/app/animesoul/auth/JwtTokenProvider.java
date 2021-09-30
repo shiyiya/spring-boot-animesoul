@@ -26,14 +26,11 @@ import java.util.Date;
 public class JwtTokenProvider {
 
     private static final Logger logger = LoggerFactory.getLogger(JwtTokenProvider.class);
-
+    private final UserDetailsService customUserDetailsService;
     @Value("${app.jwtSecret}")
     private String jwtSecret;
-
     @Value("${app.jwtExpirationInMs}")
     private long jwtExpirationInMs;
-
-    private final UserDetailsService customUserDetailsService;
 
     @Autowired
     public JwtTokenProvider(UserDetailsService customUserDetailsService) {

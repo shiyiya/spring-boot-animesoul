@@ -1,7 +1,7 @@
 package com.app.animesoul.config;
 
-import com.app.animesoul.payload.response.ValidationError;
 import com.app.animesoul.payload.response.ApiResponse;
+import com.app.animesoul.payload.response.ValidationError;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;

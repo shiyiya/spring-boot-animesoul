@@ -22,7 +22,7 @@ public class JwtUserDetail implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return user.getRoles().stream().map(role ->
-                new SimpleGrantedAuthority("ROLE_" + role.getName())
+                new SimpleGrantedAuthority(role.getName().name())
         ).collect(Collectors.toList());
     }
 
@@ -38,22 +38,22 @@ public class JwtUserDetail implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return Integer.parseInt(user.getStatus()) > 0;
+        return user.getStatus() == 0;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return Integer.parseInt(user.getStatus()) > 0;
+        return user.getStatus() == 0;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return Integer.parseInt(user.getStatus()) > 0;
+        return user.getStatus() == 0;
     }
 
     @Override
     public boolean isEnabled() {
-        return Integer.parseInt(user.getStatus()) > 0;
+        return user.getStatus() == 0;
     }
 
     public User getUser() {

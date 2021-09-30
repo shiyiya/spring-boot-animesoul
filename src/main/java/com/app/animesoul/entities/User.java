@@ -40,8 +40,8 @@ public class User extends Base {
     @Column(length = 36)
     private String bio;
 
-    @Column(length = 1)
-    private String status = "1";
+    @Column(length = 3) // 0 OPEN 1 EXPIRED 4 LOCKED
+    private int status = 1;
 
     @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER)

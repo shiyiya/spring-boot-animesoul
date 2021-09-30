@@ -10,9 +10,9 @@ import java.util.Map;
 @ToString
 @Getter
 public class ValidationError {
-    List<Map<String, String>> errors = new ArrayList<>();
     final int code = 400;
     final String message = ":) Bad Request: Parameter validation failed.";
+    List<Map<String, String>> errors = new ArrayList<>();
 
     public void addError(Map<String, String> error) {
         errors.add(error);
