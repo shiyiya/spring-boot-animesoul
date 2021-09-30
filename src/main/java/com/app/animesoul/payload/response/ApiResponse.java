@@ -3,7 +3,7 @@ package com.app.animesoul.payload.response;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
+import org.springframework.http.HttpStatus;
 
 import java.io.Serializable;
 
@@ -21,7 +21,7 @@ public class ApiResponse<T> implements Serializable {
     }
 
     public static <T> ApiResponse<T> v(T data) {
-        return new ApiResponse<>(200, data, null);
+        return new ApiResponse<>(HttpStatus.OK.value(), data, "OK");
     }
 
     public static <T> ApiResponse<T> x(Integer code, String message) {
@@ -30,5 +30,9 @@ public class ApiResponse<T> implements Serializable {
 
     public static <T> ApiResponse<T> x(Integer code) {
         return new ApiResponse<>(code, null, null);
+    }
+
+    public static <T> ApiResponse<T> notfound() {
+        return new ApiResponse<T>(HttpStatus.NOT_FOUND.value(), null, "Not Found");
     }
 }

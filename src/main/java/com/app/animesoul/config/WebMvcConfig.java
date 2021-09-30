@@ -20,9 +20,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .maxAge(3600);
     }
 
-    @Override
-    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-        converters.add(new MappingJackson2HttpMessageConverter());
-        WebMvcConfigurer.super.configureMessageConverters(converters);
-    }
+//    @Override
+//    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+//        converters.add(new MappingJackson2HttpMessageConverter());
+//        WebMvcConfigurer.super.configureMessageConverters(converters);
+//    }
 }

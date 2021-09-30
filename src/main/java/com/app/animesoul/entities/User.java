@@ -1,10 +1,15 @@
 package com.app.animesoul.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToMany;
 import javax.validation.constraints.Email;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -38,10 +43,14 @@ public class User extends Base {
     @Column(length = 1)
     private String status = "1";
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @JsonIgnore
+    @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> roles = new HashSet<>();
 
+    @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY)
+//    @NotFound(action = NotFoundAction.IGNORE)
+//    @JoinColumn(foreignKey = @javax.persistence.ForeignKey(value = ConstraintMode.NO_CONSTRAINT))
     private List<Post> posts = new ArrayList<>();
 
     public User(String userName, String password) {

@@ -1,8 +1,10 @@
 package com.app.animesoul.controller;
 
 import com.app.animesoul.entities.User;
+import com.app.animesoul.payload.response.ApiResponse;
 import com.app.animesoul.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,7 +31,7 @@ public class UserController {
     public ResponseEntity<?> signin(@NotBlank @PathVariable("userName") String userName) {
         final Optional<User> user = this.userRepository.findByUserName(userName);
         if (!user.isPresent()) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.notfound());
         }
 
         return ResponseEntity.ok().body(user);
@@ -39,11 +41,8 @@ public class UserController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN,ROLE_ROOT')")
     @GetMapping("b/{userName}")
     public ResponseEntity<?> banUser(@NotBlank @PathVariable("userName") String userName) {
-        final Optional<User> user = this.userRepository.findByUserName(userName);
-        if (!user.isPresent()) {
-            return ResponseEntity.notFound().build();
-        }
 
-        return ResponseEntity.ok().body(user);
+
+        return ResponseEntity.ok().body(userName);
     }
 }
