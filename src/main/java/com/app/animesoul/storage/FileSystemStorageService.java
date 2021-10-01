@@ -8,11 +8,14 @@ import org.springframework.util.FileSystemUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.stream.Stream;
 
 @Service
@@ -27,7 +30,14 @@ public class FileSystemStorageService implements StorageService {
 
     @Override
     public String store(MultipartFile file) {
+        if (file.getOriginalFilename() == null)
+            throw new StorageException("Failed to get file name " + file.getOriginalFilename());
+
         String filename = StringUtils.cleanPath(file.getOriginalFilename());
+        String dir = new SimpleDateFormat("yyyy/MM/dd/").format(new Date());
+        mkdir(this.rootLocation.resolve(dir).toString());
+        Path path = this.rootLocation.resolve(dir + file.getName() + "-" + new Date().getTime() + filename.substring(filename.lastIndexOf(".")));
+
         try {
             if (file.isEmpty()) {
                 throw new StorageException("Failed to store empty file " + file.getOriginalFilename());
@@ -37,7 +47,7 @@ public class FileSystemStorageService implements StorageService {
                         "Cannot store file with relative path outside current directory "
                                 + filename);
             }
-            Files.copy(file.getInputStream(), this.rootLocation.resolve(file.getOriginalFilename()));
+            Files.copy(file.getInputStream(), path);
         } catch (IOException e) {
             throw new StorageException("Failed to store file " + file.getOriginalFilename(), e);
         }
@@ -81,6 +91,12 @@ public class FileSystemStorageService implements StorageService {
     @Override
     public void deleteAll() {
         FileSystemUtils.deleteRecursively(rootLocation.toFile());
+    }
+
+    @Override
+    public boolean mkdir(String path) {
+        File d = new File(path);
+        return d.mkdirs();
     }
 
     @Override
